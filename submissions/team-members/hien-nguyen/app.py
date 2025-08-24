@@ -3,7 +3,7 @@ from pathlib import Path
 import pandas as pd
 import numpy as np
 import joblib
-from lib.app_utils import preprocess_salary, country_to_continent, aggregate_features
+from lib.app_utils import preprocess_salary, country_to_continent, aggregate_features, country_names
 import matplotlib.pyplot as plt
 import seaborn as sns
 import shap
@@ -21,8 +21,6 @@ ref_df = pd.read_csv(output/'preprocessed_data/st_reference.csv')
 salary_in_usd = np.load(preprocessed_data/'salary_in_usd.npy', allow_pickle=True)
 job_titles = np.load(preprocessed_data/'job_titles.npy', allow_pickle=True)
 salary_currency = np.load(preprocessed_data/'salary_currency.npy', allow_pickle=True)
-employee_residence = np.load(preprocessed_data/'employee_residence.npy', allow_pickle=True)
-company_location = np.load(preprocessed_data/'company_location.npy', allow_pickle=True)
 feature_names = pd.read_csv(preprocessed_data/'final_features.csv', names=['feature','importance'], skiprows=1)
 feature_names['aggregated_feature'] = feature_names['feature'].apply(aggregate_features)
 
@@ -63,119 +61,18 @@ Stop guessing, use data for accurate salary benchmarks.
 st.sidebar.title("Salary Prediction Input")
 st.sidebar.image(output/'img/app_img2.png', width=100)
 st.sidebar.write("Please enter the details that describe the job position and candidate.")
-with st.sidebar.expander("Parameter Descriptions"):
-    st.write("""
-    **Experience Level:**
-    - EN: Entry
-    - MI: Mid
-    - SE: Senior
-    - EX: Executive
-
-    **Employment Type:**
-    - FT: Full-Time
-    - PT: Part-Time
-    - CT: Contract
-    - FL: Freelance
-
-    **Country Codes (ISO 3166-1 alpha-2):**
-    - Andorra: AD
-    - Argentina: AR
-    - Armenia: AM
-    - Australia: AU
-    - Austria: AT
-    - Bahamas: BS
-    - Belgium: BE
-    - Bosnia and Herzegovina: BA
-    - Bolivia: BO
-    - Brazil: BR
-    - Bulgaria: BG
-    - Canada: CA
-    - Central African Republic: CF
-    - Chile: CL
-    - China: CN
-    - Colombia: CO
-    - Costa Rica: CR
-    - Croatia: HR
-    - Cyprus: CY
-    - Czechia: CZ
-    - Denmark: DK
-    - Dominican Republic: DO
-    - Egypt: EG
-    - Ecuador: EC
-    - Estonia: EE
-    - Finland: FI
-    - France: FR
-    - Germany: DE
-    - Ghana: GH
-    - Gibraltar: GI
-    - Greece: GR
-    - Hong Kong: HK
-    - Hungary: HU
-    - India: IN
-    - Indonesia: ID
-    - Iran: IR
-    - Iraq: IQ
-    - Ireland: IE
-    - Israel: IL
-    - Italy: IT
-    - Japan: JP
-    - Jersey: JE
-    - Kenya: KE
-    - Kuwait: KW
-    - Latvia: LV
-    - Lebanon: LB
-    - Lithuania: LT
-    - Luxembourg: LU
-    - Malaysia: MY
-    - Malta: MT
-    - Mexico: MX
-    - Moldova: MD
-    - Netherlands: NL
-    - New Zealand: NZ
-    - Nigeria: NG
-    - Norway: NO
-    - Oman: OM
-    - Pakistan: PK
-    - Peru: PE
-    - Philippines: PH
-    - Poland: PL
-    - Portugal: PT
-    - Puerto Rico: PR
-    - Qatar: QA
-    - Romania: RO
-    - Russia: RU
-    - Saudi Arabia: SA
-    - Serbia: RS
-    - Singapore: SG
-    - Slovenia: SI
-    - South Africa: ZA
-    - South Korea: KR
-    - Spain: ES
-    - Sweden: SE
-    - Switzerland: CH
-    - Thailand: TH
-    - Tunisia: TN
-    - Turkey: TR
-    - Uganda: UG
-    - Ukraine: UA
-    - United Arab Emirates: AE
-    - United Kingdom: GB
-    - United States: US
-    - Uzbekistan: UZ
-    - Vietnam: VN
-    """)
 
 # Input features based on your dataset
 # work_year = st.sidebar.selectbox("Select work year:", ("2024"))
 experience_level = st.sidebar.selectbox("Choose experience level:",
-    ("EN", "MI", "SE", "EX"))  # Entry, Mid, Senior, Executive
+    ("Entry", "Mid", "Senior", "Executive"))
 employment_type = st.sidebar.selectbox("Employment type:",
-    ("FT", "PT", "CT", "FL"))  # Full-time, Part-time, Contract, Freelance
+    ("Full-Time", "Part-Time", "Contract", "Freelance"))
 job_title = st.sidebar.selectbox("Job Title:", sorted(job_titles))
 salary_currency = st.sidebar.selectbox("Salary currency:", sorted(salary_currency))
-employee_residence = st.sidebar.selectbox("Employee residence country:", sorted(employee_residence))
+employee_residence = st.sidebar.selectbox("Employee residence country:", country_names)
 remote_ratio = st.sidebar.selectbox("Remote ratio (percent):", (0, 50, 100))
-company_location = st.sidebar.selectbox("Company location:", sorted(company_location))
+company_location = st.sidebar.selectbox("Company location:", country_names)
 company_size = st.sidebar.selectbox("Company size:", ("S", "M", "L")) # Small/Medium/Large
 
 user_input = preprocess_salary(experience_level, employment_type, job_title, salary_currency,
