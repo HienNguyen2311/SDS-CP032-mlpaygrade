@@ -228,7 +228,7 @@ How the Equation Works:
     11.656504 is the starting "average" log-salary.
 
 * Modifiers (Demographic/Job characteristics):
-    Salary is increased or decreased based on whether an employee or job fits any of the categories above. For example: being in North America ($x_0$), holding certain roles ($x_{40}, x_{25}$), and job type ($x_{33}$) all add or subtract from the base.
+    Salary is increased or decreased based on whether an employee or job fits any of the categories above. For example: being in North America ($x_0$), holding certain roles with certain experience level ($x_{40}, x_{25}$), and employment type ($x_{33}$) all add or subtract from the base.
 
 * Nested Interactions:
     The way these terms are grouped/subtracted, and then again modified by smaller scaling factors, captures subtle, nonlinear relationships and offsets between features, for instance, interacting regions and job level/year.
