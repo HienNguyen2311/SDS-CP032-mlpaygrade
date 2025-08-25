@@ -41,6 +41,10 @@ st.title("Salary Prediction")
 col1, col2 = st.columns([1, 1])
 with col1:
     st.image(output/'img/app_img1.jpg')
+    st.markdown(
+    "<span style='color:red;'>⚠️ This app is a simple demo to showcase model predictions. For convenience, you can use it here on Hugging Face Spaces instead of cloning the repo and downloading the dataset and models.</span>",
+    unsafe_allow_html=True
+    )
 with col2:
     st.write("""
 "Are you curious about your earning potential? 💰
@@ -48,6 +52,7 @@ This machine learning app estimates salary based on your experience and job deta
 Find out if your salary offer matches your role, experience, and market trends.
 Stop guessing, use data for accurate salary benchmarks.
 """)
+
     st.markdown("""
     To estimate your predicted salary, just follow the steps below:
     1. Enter your job details on the left;
@@ -125,7 +130,7 @@ if btn_predict:
     plt.tight_layout()
     st.pyplot(plt)
 
-    with st.expander("ℹ️ Important Notes for Using This Salary Prediction App"):
+    with st.expander("⚠️ℹ️ Important Notes for Using This Salary Prediction App"):
         st.markdown("""
     **Prediction Scale**
     - The app’s model predicts **log-transformed annual salary**. This allows more stable modeling, especially for high-value outliers. However, it means that all model explanations (feature impact, error metrics) are relative to the logarithm of salary.
