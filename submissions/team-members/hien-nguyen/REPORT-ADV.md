@@ -11,9 +11,11 @@
 * EX (Executive) and SE (Senior) consistently earn most; EN (Entry) the least. Median salary line plot over years (Figure 2) confirms EX>SE>MI>EN.
 
 ![Salaries Distribution by Category](output/img/all_features_boxplots.png)
+
 **Figure 1**: Salaries Distribution by Category
 
 ![Median Salaries by Job Experience over the Years](output/img/median_salaries_lineplot.png)
+
 **Figure 2**: Median Salaries by Job Experience over the Years
 
 ### 🔑 Question 2: Does remote work correlate with higher or lower salaries?
@@ -23,7 +25,7 @@
 
 ![Median Salaries by Job Experience and Remote Work](output/img/median_salaries_heatmap.png)
 
-**Figure 3**: Median Salaries by Job Experience and Remote Work
+**Figure 3**: Median Salaries Heatmaps by Categories
 
 ### 🔑 Question 3: Are there differences in salary based on company size or location?
 
@@ -39,6 +41,7 @@
 * The boxplots of salaries by job type (Figure 1) underline an inconsistency: nearly every job type shows a large interquartile range, with numerous outliers both above and below the median. Job types such as Data, ML and AI feature a broad "box" and many dots, emphasizing a lack of consistency.
 
 ![Median Salary by Job Title](output/img/title_salary_barplot.png)
+
 **Figure 4**: Median Salary by Job Title
 
 ---
@@ -55,9 +58,11 @@
 * For other categoricals, I use a mix of OneHotEncoder (for nominal (encoded in feature name as "nom__XX")) and OrdinalEncoder (for ordered categories such as experience_level, company_size, work_year, remote_ratio, encoded in feature name as "ord__XX").
 
 ![Countries Grouped by Continent](output/img/geogroup_map.png)
+
 **Figure 5**: Countries Grouped by Continent
 
 ![Countries Grouped by KMeans Clusters](output/img/knngroup_map.png)
+
 **Figure 6**: Countries Grouped by KMeans Clusters
 
 ---
@@ -70,9 +75,11 @@
 * log_salaries are much closer to normal, easing regression (Figure 7).
 
 ![Log Salary Distribution](output/img/logsalaries_histogplot.png)
+
 **Figure 7.a**: Log Salary Distribution
 
 ![Salary (USD) Distribution](output/img/salary_histogplot.png)
+
 **Figure 7.b**: Salary (USD) Distribution
 
 ---
@@ -82,9 +89,9 @@
 
 * job_level: Extracted seniority/leadership (via ``leadership_label`` function), with 3 levels: Staff, Manager and Head
 * Experience by Job Type interaction feature: exp_level_job
-* Employee continent interaction: exp_level_econtinent (experience level and employee continent), work_year_econtinent (work year and employee continent), same_continent
+* Employee continent interaction: exp_level_econtinent (experience level and employee continent), work_year_econtinent (work year and employee continent), same_continent (check if employee continent and company continent is the same)
 * Popularity: job_title_popularity (job title frequencies)
-* Clustering: KMeans group of (employee_residence, job_title)
+* Clustering: KMeans group of employee_residence and job_title
 * Macro: Merged in GDP per country per year (data downloadable at [worldbank.org](https://data.worldbank.org/indicator/NY.GDP.MKTP.CD)).
 * Log Salary: Target transformed to log_salaries.
 
@@ -94,6 +101,7 @@
 **Which features, if any, did you choose to drop or simplify before modeling, and what was your justification?**  
 
 * Dropped: job_title, employee_residence, and company_location (raw) — high cardinality, used their aggregates/clusters instead.
+* salary_in_usd is aslo dropped and the target column is changed to log_salaries
 * Only categories with tractable cardinality were retained for encoding.
 * Outliers not removed (explicitly quantified, not dropped) as dropping outliers did not improve performance metrics.
 
@@ -121,6 +129,7 @@ Imbalance:
 * Some features (like groupings or clusters) may remain sparse, but overall the log target and aggregate encodings reduce extreme sparsity from high-cardinality categories.
 
 ![Categorical Value Counts by Features](output/img/all_features_barplots.png)
+
 **Figure 8**: Categorical Value Counts by Features
 
 ---
@@ -158,6 +167,7 @@ The neural network built for this tabular regression problem is a feed-forward n
 * Trends during training: Both train and test loss curves drop sharply and then flatten out (see Figure 9), indicating effective fitting and good generalization.
 
 ![ANN Training and Test Loss](output/img/ann_training_loss.png)
+
 **Figure 9**: ANN Training and Test Loss
 
 ---
@@ -366,15 +376,18 @@ Deployment Steps:
 Technical Challenges & Solutions:
 
 * File Paths & Missing Files
+
     FileNotFoundError for model and data files (e.g. /app/output/models/column_transformer.joblib).
     Learned that only folders included with COPY in the Dockerfile are available in the container.
     Fixed by adding COPY output/ ./output/ (and other relevant directories) to Dockerfile.
 
 * Unnecessary Dependencies
+
     My initial requirements.txt had dozens of irrelevant packages (Jupyter, MLflow, FastAPI, transformers, CUDA, etc.).
     Simplified to just those needed: streamlit, pandas, numpy, joblib, matplotlib, seaborn, scikit-learn, shap.
 
 * Permission Errors
+
     Saw errors like PermissionError: [Errno 13] Permission denied: '/.streamlit'.
     Fixed by redirecting Streamlit config/cache to a writable temporary directory with os.environ["STREAMLIT_HOME"] = "/tmp" (and similar variables).
 
