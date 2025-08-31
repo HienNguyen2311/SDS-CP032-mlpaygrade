@@ -109,7 +109,7 @@ This section synthesizes key findings and highlights from the full project repor
 - *Salary by Role & Experience:*
   - AI/ML roles yield the highest median salaries; significant high-value outliers in “Others” and some Data jobs.
   - Experience level strongly matters: Executives and Seniors earn most, while Entry roles are lowest; confirmed across years.
-  - *Salary distributions* show substantial variability even within the same job title.
+  - Salary distributions show substantial variability even within the same job title.
 
 - *Remote Work Effects:*
   - Fully-remote (100%) roles can have higher outlier salaries but also a wide spread.
@@ -136,7 +136,7 @@ This section synthesizes key findings and highlights from the full project repor
   - 4 ordinal features
   - 12 nominal features (types, geography, engineered interactions)
   - 2 numeric features (popularity, GDP)
-  - *Imbalance found* in categorical features; handled via aggregate encodings and clusters.
+  - Imbalance found in categorical features; handled via aggregate encodings and clusters.
 
 ---
 
@@ -177,7 +177,7 @@ This section synthesizes key findings and highlights from the full project repor
 
 ### 🚀 Deployment & App Design
 
-- *Streamlit app* supports:
+- Streamlit app supports:
   - Simple, guided input for salary prediction
   - Market comparison histograms
   - SHAP bar chart interpreting the top-5 feature impacts
@@ -194,14 +194,6 @@ This section synthesizes key findings and highlights from the full project repor
 - Top feature impacts mapped to simple factors (experience level, role, location).
 - Predictions are market estimates, not rigid guarantees; users are encouraged to interpret as guidance.
 
----
-
-### 📈 Advanced Extensions (Recommended)
-
-- Batch predictions & downloadable benchmark reports
-- Personalized recommendations for career/salary improvement
-- User account history, what-if analysis tools
-- Live market data integration for real-time benchmarking
 
 *For implementation or detailed methodology, refer to the full project report.*
 
